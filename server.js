@@ -30,10 +30,16 @@ const resolvers = {
 const app = express();
 const server = new ApolloServer({ typeDefs, resolvers });
 
-// Aplicar Apollo Server a la aplicación Express
-server.applyMiddleware({ app });
-
-// Iniciar el servidor Express
-app.listen({ port: 4000 }, () =>
-  console.log(`Servidor ejecutándose en http://localhost:4000${server.graphqlPath}`)
-);
+// Iniciar el servidor Apollo de manera asincrónica
+async function startServer() {
+    await server.start(); // Inicia el servidor Apollo
+    server.applyMiddleware({ app }); // Aplica Apollo Server a Express
+  
+    // Iniciar el servidor Express
+    app.listen({ port: 4000 }, () =>
+      console.log(`Servidor ejecutándose en http://localhost:4000${server.graphqlPath}`)
+    );
+  }
+  
+  // Llamar la función para iniciar el servidor
+  startServer();
